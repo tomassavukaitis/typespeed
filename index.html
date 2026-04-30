@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeSpeed</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Screen 1: Start -->
+  <div id="start-screen" class="screen active">
+    <div class="start-container">
+      <h1 class="title">TypeSpeed</h1>
+      <p class="subtitle">Test your typing speed and accuracy</p>
+      <button id="start-btn" class="btn btn-primary">Start</button>
+    </div>
+  </div>
+
+  <!-- Screen 2: Typing -->
+  <div id="typing-screen" class="screen">
+    <div class="typing-header">
+      <div class="stats-bar">
+        <span class="stat"><span class="stat-label">WPM</span> <span id="live-wpm">0</span></span>
+        <span class="stat"><span class="stat-label">Accuracy</span> <span id="live-accuracy">100%</span></span>
+      </div>
+      <div id="timer" class="timer">60</div>
+    </div>
+    <div id="passage-display" class="passage-display"></div>
+    <textarea
+      id="typing-input"
+      class="typing-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      autofocus
+    ></textarea>
+  </div>
+
+  <!-- Screen 3: Results -->
+  <div id="results-screen" class="screen">
+    <div class="results-container">
+      <h2 class="results-title">Results</h2>
+      <div class="results-main">
+        <div class="result-big">
+          <span id="result-wpm" class="result-number">0</span>
+          <span class="result-unit">WPM</span>
+        </div>
+        <div class="result-big">
+          <span id="result-accuracy" class="result-number">0%</span>
+          <span class="result-unit">Accuracy</span>
+        </div>
+      </div>
+      <div class="results-breakdown">
+        <div class="breakdown-item"><span class="breakdown-label">Total Characters</span><span id="result-total-chars">0</span></div>
+        <div class="breakdown-item"><span class="breakdown-label">Correct Characters</span><span id="result-correct-chars">0</span></div>
+        <div class="breakdown-item"><span class="breakdown-label">Incorrect Characters</span><span id="result-incorrect-chars">0</span></div>
+        <div class="breakdown-item"><span class="breakdown-label">Total Words</span><span id="result-total-words">0</span></div>
+      </div>
+      <h3 class="review-title">Passage Review</h3>
+      <div id="passage-review" class="passage-review"></div>
+      <button id="retry-btn" class="btn btn-primary">Try Again</button>
+    </div>
+  </div>
+
+  <script src="js/passages.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/typing.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
