@@ -3,3 +3,4 @@
 *.tfstate.backup
 *.pem
 .terraform.lock.hcl
+*.tfvars
