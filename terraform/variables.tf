@@ -13,7 +13,6 @@ variable "instance_type" {
 variable "ssh_cidr" {
   description = "CIDR block allowed to SSH into the instance"
   type        = string
-  default     = "84.15.187.255/32"
 }
 
 variable "app_repo" {

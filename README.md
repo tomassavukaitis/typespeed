@@ -66,7 +66,7 @@ The app may take a minute or two to become available while the instance runs the
 |---|---|---|
 | `region` | AWS region | `eu-west-1` |
 | `instance_type` | EC2 instance type | `t2.micro` |
-| `ssh_cidr` | CIDR block allowed to SSH into the instance | `84.15.187.255/32` |
+| `ssh_cidr` | CIDR block allowed to SSH into the instance | *required* |
 | `app_repo` | GitHub repo URL to deploy | `https://github.com/tomassavukaitis/typespeed.git` |
 
 Override at apply time:
