@@ -28,4 +28,5 @@ TypeSpeed is a 60-second typing speed test. Three screens (Start → Typing → 
 
 Each set of changes gets its own branch — do not reuse old feature branches.
 - Create a new branch from `main` before committing: `feature/<description>` or `fix/<description>`
-- Push with `git push -u origin <branch-name>`
+- Push the branch with `git push -u origin <branch-name>`
+- **Never merge into `main` or push directly to `main`** — only push feature/fix branches and let the user merge via GitHub
