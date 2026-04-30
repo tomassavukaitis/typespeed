@@ -5,6 +5,10 @@ class TypingEngine {
     this.spans = [];
     this.correctCount = 0;
     this.incorrectCount = 0;
+    this.totalMistakes = 0;
+    this.totalKeystrokes = 0;
+    this.everIncorrect = new Set();
+    this.previousLength = 0;
     this.currentIndex = 0;
     this.finished = false;
 
@@ -33,6 +37,21 @@ class TypingEngine {
     this.incorrectCount = 0;
     this.currentIndex = typedText.length;
 
+    // Only count new forward keystrokes, not backspaces
+    if (typedText.length > this.previousLength) {
+      const newChars = typedText.length - this.previousLength;
+      for (let i = this.previousLength; i < typedText.length; i++) {
+        this.totalKeystrokes++;
+        if (i < this.passage.length && typedText[i] !== this.passage[i]) {
+          if (!this.everIncorrect.has(i)) {
+            this.everIncorrect.add(i);
+            this.totalMistakes++;
+          }
+        }
+      }
+    }
+    this.previousLength = typedText.length;
+
     for (let i = 0; i < this.spans.length; i++) {
       const span = this.spans[i];
       span.className = 'char';
@@ -50,6 +69,22 @@ class TypingEngine {
       }
     }
 
+    // Auto-scroll to keep current position visible
+    const target = this.spans[this.currentIndex] || this.spans[this.spans.length - 1];
+    if (target) {
+      const container = this.displayElement;
+      const targetTop = target.offsetTop;
+      const targetHeight = target.offsetHeight;
+      const scrollTop = container.scrollTop;
+      const containerHeight = container.clientHeight;
+
+      if (targetTop < scrollTop) {
+        container.scrollTop = targetTop - 10;
+      } else if (targetTop + targetHeight > scrollTop + containerHeight) {
+        container.scrollTop = targetTop + targetHeight - containerHeight + 10;
+      }
+    }
+
     this.finished = typedText.length >= this.passage.length;
     return this.finished;
   }
@@ -58,7 +93,8 @@ class TypingEngine {
     return {
       correctCount: this.correctCount,
       incorrectCount: this.incorrectCount,
-      totalTyped: this.correctCount + this.incorrectCount,
+      totalMistakes: this.totalMistakes,
+      totalKeystrokes: this.totalKeystrokes,
       totalChars: this.passage.length,
     };
   }
@@ -68,10 +104,10 @@ class TypingEngine {
     for (let i = 0; i < this.spans.length; i++) {
       const char = this.passage[i] === ' ' ? ' ' : this.escapeHTML(this.passage[i]);
       if (i < this.currentIndex) {
-        if (this.spans[i].classList.contains('correct')) {
-          html += `<span class="char-correct">${char}</span>`;
-        } else {
+        if (this.everIncorrect.has(i)) {
           html += `<span class="char-incorrect">${char}</span>`;
+        } else {
+          html += `<span class="char-correct">${char}</span>`;
         }
       } else {
         html += `<span class="char-untyped">${char}</span>`;

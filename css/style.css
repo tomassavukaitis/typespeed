@@ -110,12 +110,31 @@ body {
   letter-spacing: 0.05em;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .timer {
   font-size: 1.5rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   min-width: 3ch;
   text-align: right;
+}
+
+.btn-small {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.btn-small:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
 }
 
 .timer.warning {
@@ -136,6 +155,8 @@ body {
   padding: 1.5rem;
   margin-bottom: 1rem;
   min-height: 150px;
+  max-height: 60vh;
+  overflow-y: auto;
   cursor: text;
 }
 
@@ -166,9 +187,13 @@ body {
 }
 
 .typing-input {
-  position: absolute;
-  left: -9999px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   opacity: 0;
+  pointer-events: none;
 }
 
 /* Results Screen */
