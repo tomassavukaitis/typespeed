@@ -10,6 +10,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "ssh_cidr" {
+  description = "CIDR block allowed to SSH into the instance"
+  type        = string
+  default     = "84.15.187.255/32"
+}
+
 variable "app_repo" {
   description = "GitHub repository URL for the app"
   type        = string
