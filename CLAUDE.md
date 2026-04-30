@@ -26,6 +26,6 @@ TypeSpeed is a 60-second typing speed test. Three screens (Start → Typing → 
 
 ## Git Workflow
 
-After major changes, create a new branch and push it to GitHub:
-- Branch naming: `feature/<description>` or `fix/<description>`
-- Push new branches with `git push -u origin <branch-name>`
+Each set of changes gets its own branch — do not reuse old feature branches.
+- Create a new branch from `main` before committing: `feature/<description>` or `fix/<description>`
+- Push with `git push -u origin <branch-name>`
