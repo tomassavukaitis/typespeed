@@ -49,18 +49,30 @@
 
   // --- WebSocket ---
 
+  let pendingMessages = [];
+
   function connectWS() {
     if (ws && ws.readyState <= 1) return;
 
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
     ws = new WebSocket(protocol + '//' + location.host);
 
-    ws.onopen = function () {};
+    ws.onopen = function () {
+      // Flush any messages that were queued before the connection opened
+      pendingMessages.forEach(function (m) {
+        ws.send(JSON.stringify(m));
+      });
+      pendingMessages = [];
+    };
 
     ws.onmessage = function (e) {
       let msg;
       try { msg = JSON.parse(e.data); } catch { return; }
       handleServerMessage(msg);
+    };
+
+    ws.onerror = function () {
+      showError(menuError, 'Could not connect to server.');
     };
 
     ws.onclose = function () {
@@ -76,6 +88,9 @@
   function send(msg) {
     if (ws && ws.readyState === 1) {
       ws.send(JSON.stringify(msg));
+    } else if (ws && ws.readyState === 0) {
+      // Connection still opening — queue the message
+      pendingMessages.push(msg);
     }
   }
 
