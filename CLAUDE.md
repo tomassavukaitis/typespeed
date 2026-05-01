@@ -24,6 +24,25 @@ TypeSpeed is a 60-second typing speed test. Three screens (Start → Typing → 
 - A hidden `<textarea>` captures input (paste/autocorrect/spellcheck disabled). The visible passage display is a `<div>` of styled `<span>` elements.
 - Passage selection avoids immediate repeats by tracking `lastPassageIndex`.
 
+## Deployment
+
+Deployment to AWS uses a single Ansible playbook that orchestrates everything:
+
+```bash
+cd ansible
+ansible-playbook deploy.yml
+```
+
+**`ansible/deploy.yml`** — Two-play playbook:
+- **Play 1 (localhost):** Runs `terraform init` and `terraform apply`. Auto-detects the current public IP via `checkip.amazonaws.com` and passes it as `ssh_cidr` to Terraform. Extracts the EC2 IP and SSH key path from Terraform outputs and adds the host for Play 2.
+- **Play 2 (EC2):** Waits for SSH, installs Docker/Git via dnf, clones or pulls the repo, builds the Docker image, and starts the container on port 80.
+
+**`ansible/ansible.cfg`** — Disables host key checking for EC2 connections.
+
+**`terraform/`** — Manages EC2 instance, security group, and SSH key pair. No `user_data` script — Ansible handles instance setup.
+
+To tear down: `cd terraform && terraform destroy`.
+
 ## Git Workflow
 
 Each set of changes gets its own branch — do not reuse old feature branches.
