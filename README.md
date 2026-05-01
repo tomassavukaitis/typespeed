@@ -16,7 +16,7 @@ For local development you only need a web browser. No build tools, bundlers, or 
 For other deployment methods:
 
 - **Docker** — Docker installed
-- **AWS (Terraform)** — AWS account, AWS CLI configured, Terraform >= 1.0
+- **AWS (Ansible + Terraform)** — AWS account, AWS CLI configured, Terraform >= 1.0, Ansible >= 2.12
 
 ## Running Locally
 
@@ -39,41 +39,34 @@ Then open `http://localhost:8080`.
 
 ## Deploying to AWS
 
-The `terraform/` directory contains a Terraform configuration that deploys TypeSpeed to an EC2 instance.
+Deployment uses Ansible to orchestrate Terraform (infrastructure) and app setup in a single command.
 
 ### What it creates
 
 - EC2 instance (t2.micro by default) running Amazon Linux 2023
-- Security group allowing inbound HTTP (80) and SSH (22)
+- Security group allowing inbound HTTP (80) and SSH (22 from your current IP)
 - Auto-generated SSH key pair saved locally as `typespeed-key.pem`
 - 30 GB gp3 root volume
-- User data script that installs Docker, builds the image, and runs the container
 
 ### Deploy
 
 ```bash
-cd terraform
-terraform init
-terraform plan
-terraform apply
+cd ansible
+ansible-playbook deploy.yml
 ```
 
-The app may take a minute or two to become available while the instance runs the startup script.
+This single command handles everything:
+- If the EC2 instance doesn't exist, Terraform creates it and Ansible sets it up
+- If the EC2 instance already exists, Terraform reports no changes and Ansible pulls the latest code and redeploys
+- Your current public IP is automatically detected and used for the SSH security group rule
 
-### Variables
+### Terraform Variables
 
 | Variable | Description | Default |
 |---|---|---|
 | `region` | AWS region | `eu-west-1` |
 | `instance_type` | EC2 instance type | `t2.micro` |
-| `ssh_cidr` | CIDR block allowed to SSH into the instance | *required* |
-| `app_repo` | GitHub repo URL to deploy | `https://github.com/tomassavukaitis/typespeed.git` |
-
-Override at apply time:
-
-```bash
-terraform apply -var="region=us-east-1"
-```
+| `ssh_cidr` | CIDR block allowed to SSH (auto-set by Ansible) | *required* |
 
 ### Outputs
 
@@ -91,6 +84,7 @@ A `t2.micro` instance is included in the [AWS Free Tier](https://aws.amazon.com/
 ### Teardown
 
 ```bash
+cd terraform
 terraform destroy
 ```
 
@@ -106,5 +100,6 @@ js/
   typing.js         — Input handling and passage rendering
   app.js            — Main controller, screen transitions
 Dockerfile          — Nginx-based container image
-terraform/          — AWS EC2 deployment via Terraform
+terraform/          — AWS infrastructure (Terraform)
+ansible/            — Deployment playbook (Ansible)
 ```

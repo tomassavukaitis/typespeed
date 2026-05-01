@@ -14,9 +14,3 @@ variable "ssh_cidr" {
   description = "CIDR block allowed to SSH into the instance"
   type        = string
 }
-
-variable "app_repo" {
-  description = "GitHub repository URL for the app"
-  type        = string
-  default     = "https://github.com/tomassavukaitis/typespeed.git"
-}
