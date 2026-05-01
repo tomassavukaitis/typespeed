@@ -31,12 +31,6 @@
       register: ec2_ip
       changed_when: false
 
-    - name: Get SSH key path
-      ansible.builtin.command:
-        cmd: terraform -chdir=../terraform output -raw ssh_private_key_file
-      register: ssh_key_path
-      changed_when: false
-
     - name: Show target host
       ansible.builtin.debug:
         msg: "Deploying to {{ ec2_ip.stdout }}"
@@ -46,7 +40,7 @@
         name: "{{ ec2_ip.stdout }}"
         groups: ec2
         ansible_user: ec2-user
-        ansible_ssh_private_key_file: "{{ ssh_key_path.stdout }}"
+        ansible_ssh_private_key_file: "{{ playbook_dir }}/../terraform/typespeed-key.pem"
 
 # Play 2: Deploy the app on the EC2 instance
 - name: Deploy app
@@ -56,7 +50,7 @@
   tasks:
     - name: Wait for SSH
       ansible.builtin.wait_for_connection:
-        timeout: 300
+        timeout: 100
 
     - name: Install Docker and Git
       ansible.builtin.dnf:
