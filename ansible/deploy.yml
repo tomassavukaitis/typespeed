@@ -111,7 +111,7 @@
         state: started
         restart_policy: always
         ports:
-          - "80:80"
+          - "80:3000"
 
     - name: Show app URL
       ansible.builtin.debug:
