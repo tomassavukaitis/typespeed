@@ -18,11 +18,14 @@
   let lastPassageIndex = -1;
 
   function showScreen(screen) {
-    startScreen.classList.remove('active');
-    typingScreen.classList.remove('active');
-    resultsScreen.classList.remove('active');
+    document.querySelectorAll('.screen').forEach(function (s) {
+      s.classList.remove('active');
+    });
     screen.classList.add('active');
   }
+
+  // Expose globally so multiplayer.js can switch screens
+  window.showScreen = showScreen;
 
   // Random passage selection, avoiding immediate repeats
   function pickPassage() {
