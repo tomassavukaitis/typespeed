@@ -1,3 +1,4 @@
+// Standard formula: 1 word = 5 characters
 function calculateWPM(correctChars, elapsedSeconds) {
   if (elapsedSeconds <= 0 || correctChars <= 0) return 0;
   return Math.round((correctChars / 5) / (elapsedSeconds / 60));

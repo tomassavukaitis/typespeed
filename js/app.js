@@ -1,3 +1,4 @@
+// Main controller — wires DOM events, manages screen transitions, game lifecycle
 (function () {
   const startScreen = document.getElementById('start-screen');
   const typingScreen = document.getElementById('typing-screen');
@@ -23,6 +24,7 @@
     screen.classList.add('active');
   }
 
+  // Random passage selection, avoiding immediate repeats
   function pickPassage() {
     let index;
     do {
@@ -98,6 +100,7 @@
     showScreen(resultsScreen);
   }
 
+  // Timer starts on first keystroke so the user can read the passage first
   typingInput.addEventListener('input', function () {
     if (!timerStarted && typingInput.value.length > 0) {
       timerStarted = true;
@@ -116,6 +119,7 @@
     e.preventDefault();
   });
 
+  // Clicking the passage focuses the hidden textarea so typing works
   passageDisplay.addEventListener('click', function () {
     typingInput.focus();
   });
