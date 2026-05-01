@@ -88,10 +88,6 @@ resource "aws_instance" "typespeed" {
   key_name               = aws_key_pair.typespeed.key_name
   vpc_security_group_ids = [aws_security_group.typespeed.id]
 
-  user_data = templatefile("${path.module}/user_data.sh", {
-    app_repo = var.app_repo
-  })
-
   root_block_device {
     volume_size = 30
     volume_type = "gp3"
