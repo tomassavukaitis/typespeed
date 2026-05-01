@@ -3,18 +3,19 @@ class TypingEngine {
     this.passage = passage;
     this.displayElement = displayElement;
     this.spans = [];
-    this.correctCount = 0;
-    this.incorrectCount = 0;
-    this.totalMistakes = 0;
-    this.totalKeystrokes = 0;
-    this.everIncorrect = new Set();
-    this.previousLength = 0;
+    this.correctCount = 0;       // Currently correct characters
+    this.incorrectCount = 0;     // Currently incorrect characters
+    this.totalMistakes = 0;      // Cumulative unique mistakes (not reset by backspace)
+    this.totalKeystrokes = 0;    // Forward keystrokes only (backspaces excluded)
+    this.everIncorrect = new Set(); // Tracks positions ever mistyped to avoid double-counting
+    this.previousLength = 0;     // Previous input length to detect forward vs backward typing
     this.currentIndex = 0;
     this.finished = false;
 
     this._renderPassage();
   }
 
+  // Create one <span> per character so each can be individually styled
   _renderPassage() {
     this.displayElement.innerHTML = '';
     this.spans = [];
@@ -32,6 +33,7 @@ class TypingEngine {
     }
   }
 
+  // Compare typed text against passage and update character styles
   update(typedText) {
     this.correctCount = 0;
     this.incorrectCount = 0;
@@ -99,6 +101,7 @@ class TypingEngine {
     };
   }
 
+  // Build color-coded HTML for the results screen (green=correct, red=mistyped, gray=untyped)
   getReviewHTML() {
     let html = '';
     for (let i = 0; i < this.spans.length; i++) {

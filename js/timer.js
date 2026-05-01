@@ -1,3 +1,4 @@
+// Uses Date.now() wall-clock time instead of counting intervals to avoid drift
 class Timer {
   constructor(duration, onTick, onComplete) {
     this.duration = duration;
