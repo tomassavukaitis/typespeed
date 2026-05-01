@@ -12,4 +12,4 @@ git clone ${app_repo} /opt/typespeed
 # Build and run the container
 cd /opt/typespeed
 docker build -t typespeed .
-docker run -d --name typespeed --restart always -p 80:80 typespeed
+docker run -d --name typespeed --restart always -p 80:3000 typespeed

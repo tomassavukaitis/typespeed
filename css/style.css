@@ -62,6 +62,22 @@ body {
   background: #89b4fa;
 }
 
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--accent);
+  font-weight: 600;
+  border: 1px solid var(--accent);
+}
+
+.btn-secondary:hover {
+  background: rgba(122, 162, 247, 0.1);
+}
+
 /* Start Screen */
 .start-container {
   text-align: center;
@@ -79,6 +95,12 @@ body {
   font-size: 1.2rem;
   color: var(--text-muted);
   margin-bottom: 3rem;
+}
+
+.start-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
 }
 
 /* Typing Screen */
@@ -287,6 +309,289 @@ body {
 
 .passage-review .char-untyped {
   color: var(--text-muted);
+}
+
+/* Multiplayer Menu */
+.mp-menu-container {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mp-form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.mp-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.mp-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.mp-input:focus {
+  border-color: var(--accent);
+}
+
+.mp-input::placeholder {
+  color: var(--text-muted);
+}
+
+.mp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.mp-actions .btn-primary {
+  width: 100%;
+}
+
+.mp-divider {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.mp-divider::before,
+.mp-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--border);
+}
+
+.mp-divider::before { left: 0; }
+.mp-divider::after { right: 0; }
+
+.mp-join-row {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mp-code-field {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.mp-error {
+  background: rgba(247, 118, 142, 0.15);
+  color: var(--red);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.mp-back-btn {
+  margin-top: 2rem;
+}
+
+/* Multiplayer Lobby */
+.mp-lobby-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mp-room-code-display {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.mp-room-code-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.mp-room-code {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+}
+
+.mp-lobby-player-list {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.lobby-player {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.lobby-player-self {
+  border-color: var(--accent);
+}
+
+.host-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--yellow);
+  background: rgba(224, 175, 104, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: auto;
+}
+
+.mp-lobby-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Multiplayer Progress Bars */
+.mp-progress-bars {
+  margin-bottom: 1rem;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+}
+
+.progress-row-self .progress-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.progress-name {
+  width: 100px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.progress-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.progress-bar-done {
+  background: var(--green);
+}
+
+.progress-pct {
+  width: 40px;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Countdown Overlay */
+.mp-countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 27, 38, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.mp-countdown-number {
+  font-size: 8rem;
+  font-weight: 700;
+  color: var(--accent);
+  animation: countdown-pulse 1s ease infinite;
+}
+
+@keyframes countdown-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+/* Standings Table */
+.mp-standings-table {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.mp-standings-table th {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mp-standings-table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mp-standings-table tr.standings-self td {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.mp-results-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 /* Responsive */
