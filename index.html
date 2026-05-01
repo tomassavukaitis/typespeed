@@ -12,7 +12,10 @@
     <div class="start-container">
       <h1 class="title">TypeSpeed</h1>
       <p class="subtitle">Test your typing speed and accuracy</p>
-      <button id="start-btn" class="btn btn-primary">Start</button>
+      <div class="start-buttons">
+        <button id="start-btn" class="btn btn-primary">Solo</button>
+        <button id="multiplayer-btn" class="btn btn-secondary">Multiplayer</button>
+      </div>
     </div>
   </div>
 
@@ -66,10 +69,116 @@
     </div>
   </div>
 
+  <!-- Screen 4: Multiplayer Menu -->
+  <div id="mp-menu-screen" class="screen">
+    <div class="mp-menu-container">
+      <h2 class="results-title">Multiplayer</h2>
+      <div class="mp-form-group">
+        <label class="mp-label" for="mp-name-input">Display Name</label>
+        <input id="mp-name-input" class="mp-input" type="text" maxlength="16" placeholder="Enter your name" autocomplete="off">
+      </div>
+      <div class="mp-actions">
+        <button id="mp-create-btn" class="btn btn-primary">Create Game</button>
+        <div class="mp-divider"><span>or</span></div>
+        <div class="mp-join-row">
+          <input id="mp-code-input" class="mp-input mp-code-field" type="text" maxlength="6" placeholder="Room code" autocomplete="off">
+          <button id="mp-join-btn" class="btn btn-primary">Join</button>
+        </div>
+      </div>
+      <div id="mp-menu-error" class="mp-error" style="display:none"></div>
+      <button id="mp-menu-back-btn" class="btn btn-small mp-back-btn">Back</button>
+    </div>
+  </div>
+
+  <!-- Screen 5: Multiplayer Lobby -->
+  <div id="mp-lobby-screen" class="screen">
+    <div class="mp-lobby-container">
+      <h2 class="results-title">Lobby</h2>
+      <div class="mp-room-code-display">
+        <span class="mp-label">Room Code</span>
+        <div class="mp-room-code-row">
+          <span id="mp-lobby-code" class="mp-room-code">------</span>
+          <button id="mp-lobby-copy-btn" class="btn btn-small">Copy</button>
+        </div>
+      </div>
+      <div class="mp-lobby-player-list">
+        <span class="mp-label">Players</span>
+        <div id="mp-lobby-players"></div>
+      </div>
+      <div id="mp-lobby-error" class="mp-error" style="display:none"></div>
+      <div class="mp-lobby-actions">
+        <button id="mp-lobby-start-btn" class="btn btn-primary">Start Race</button>
+        <button id="mp-lobby-leave-btn" class="btn btn-small">Leave</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 6: Multiplayer Race -->
+  <div id="mp-typing-screen" class="screen">
+    <div id="mp-countdown-overlay" class="mp-countdown-overlay" style="display:none">
+      <span id="mp-countdown-number" class="mp-countdown-number">3</span>
+    </div>
+    <div class="typing-header">
+      <div class="stats-bar">
+        <span class="stat"><span class="stat-label">WPM</span> <span id="mp-live-wpm">0</span></span>
+        <span class="stat"><span class="stat-label">Accuracy</span> <span id="mp-live-accuracy">100%</span></span>
+      </div>
+      <div class="header-right">
+        <div id="mp-timer" class="timer">60</div>
+      </div>
+    </div>
+    <div id="mp-progress-bars" class="mp-progress-bars"></div>
+    <div id="mp-passage-display" class="passage-display"></div>
+    <textarea
+      id="mp-typing-input"
+      class="typing-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    ></textarea>
+  </div>
+
+  <!-- Screen 7: Multiplayer Results -->
+  <div id="mp-results-screen" class="screen">
+    <div class="results-container">
+      <h2 class="results-title">Race Results</h2>
+      <div class="results-main">
+        <div class="result-big">
+          <span id="mp-result-wpm" class="result-number">0</span>
+          <span class="result-unit">WPM</span>
+        </div>
+        <div class="result-big">
+          <span id="mp-result-accuracy" class="result-number">0%</span>
+          <span class="result-unit">Accuracy</span>
+        </div>
+      </div>
+      <h3 class="review-title">Standings</h3>
+      <table class="mp-standings-table">
+        <thead>
+          <tr>
+            <th>Place</th>
+            <th>Name</th>
+            <th>WPM</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody id="mp-standings-body"></tbody>
+      </table>
+      <h3 class="review-title">Passage Review</h3>
+      <div id="mp-passage-review" class="passage-review"></div>
+      <div class="mp-results-actions">
+        <button id="mp-play-again-btn" class="btn btn-primary">Play Again</button>
+        <button id="mp-results-leave-btn" class="btn btn-small">Leave</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/passages.js"></script>
   <script src="js/timer.js"></script>
   <script src="js/scoring.js"></script>
   <script src="js/typing.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/multiplayer.js"></script>
 </body>
 </html>
