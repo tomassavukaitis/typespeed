@@ -441,11 +441,49 @@
     send({ type: 'join_room', roomCode: code, playerName: playerName });
   });
 
-  lobbyCopyBtn.addEventListener('click', function () {
-    navigator.clipboard.writeText(lobbyCode.textContent).then(function () {
-      lobbyCopyBtn.textContent = 'Copied!';
-      setTimeout(function () { lobbyCopyBtn.textContent = 'Copy'; }, 1500);
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+
+    return new Promise(function (resolve, reject) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        if (document.execCommand('copy')) {
+          resolve();
+        } else {
+          reject(new Error('Copy command failed'));
+        }
+      } catch (err) {
+        reject(err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
     });
+  }
+
+  lobbyCopyBtn.addEventListener('click', function () {
+    const code = lobbyCode.textContent.trim();
+    if (!code || code === '------') {
+      return showError(lobbyError, 'No room code available to copy.');
+    }
+
+    copyToClipboard(code)
+      .then(function () {
+        lobbyCopyBtn.textContent = 'Copied!';
+        setTimeout(function () { lobbyCopyBtn.textContent = 'Copy'; }, 1500);
+      })
+      .catch(function () {
+        showError(lobbyError, 'Unable to copy room code. Please copy it manually.');
+      });
   });
 
   lobbyStartBtn.addEventListener('click', function () {
