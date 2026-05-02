@@ -234,7 +234,9 @@
   }
 
   // --- Race ---
-  // Initialize race with given passage and start countdown  function startRace(passageIndex) {
+
+  // Initialize race with given passage and start countdown
+  function startRace(passageIndex) {
     mpCountdownOverlay.style.display = 'none';
     mpTypingInput.disabled = false;
     mpTypingInput.value = '';
