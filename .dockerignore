@@ -1,4 +1,7 @@
 .git
+node_modules
+terraform
+ansible
 CLAUDE.md
 README.md
 .dockerignore
