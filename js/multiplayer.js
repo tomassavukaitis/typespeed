@@ -54,6 +54,7 @@
   var MAX_RECONNECT_ATTEMPTS = 3;
   var RECONNECT_DELAY = 1000;
 
+  // Establish WebSocket connection to server
   function connectWS(onOpenCallback) {
     if (ws && ws.readyState <= 1) {
       if (onOpenCallback) onOpenCallback();
@@ -105,6 +106,7 @@
     };
   }
 
+  // Send message to server, queue if connection not ready
   function send(msg) {
     if (ws && ws.readyState === 1) {
       ws.send(JSON.stringify(msg));
@@ -116,6 +118,7 @@
 
   // --- Message handling ---
 
+  // Process messages received from server
   function handleServerMessage(msg) {
     switch (msg.type) {
       case 'room_created':
@@ -189,12 +192,14 @@
 
   // --- UI helpers ---
 
+  // Display error message temporarily
   function showError(el, text) {
     el.textContent = text;
     el.style.display = 'block';
     setTimeout(function () { el.style.display = 'none'; }, 4000);
   }
 
+  // Display lobby screen with room code and players
   function showLobby(code, players) {
     menuError.style.display = 'none';
     lobbyError.style.display = 'none';
@@ -204,6 +209,7 @@
     window.showScreen(mpLobbyScreen);
   }
 
+  // Update lobby player list display
   function renderLobbyPlayers(players) {
     lobbyPlayers.innerHTML = '';
     players.forEach(function (p) {
@@ -228,8 +234,7 @@
   }
 
   // --- Race ---
-
-  function startRace(passageIndex) {
+  // Initialize race with given passage and start countdown  function startRace(passageIndex) {
     mpCountdownOverlay.style.display = 'none';
     mpTypingInput.disabled = false;
     mpTypingInput.value = '';
@@ -251,6 +256,7 @@
     progressThrottleId = setInterval(sendProgress, 200);
   }
 
+  // Update timer display during race
   function onRaceTick(remaining) {
     mpTimerDisplay.textContent = remaining;
     mpTimerDisplay.className = 'timer';
@@ -261,10 +267,12 @@
     }
   }
 
+  // Handle race timeout
   function onRaceTimeUp() {
     finishRace();
   }
 
+  // Send current progress to server
   function sendProgress() {
     if (!engine || !timer) return;
     const stats = engine.getStats();
@@ -282,6 +290,7 @@
     });
   }
 
+  // End the race and send final stats
   function finishRace() {
     if (timer) timer.stop();
     if (progressThrottleId) {
@@ -303,6 +312,7 @@
     });
   }
 
+  // Update live WPM and accuracy during race
   function updateMpLiveStats() {
     const stats = engine.getStats();
     const elapsed = timer.getElapsed();
@@ -316,6 +326,7 @@
 
   // --- Progress bars ---
 
+  // Update progress bar display for all players
   function renderProgressBars(players) {
     mpProgressBars.innerHTML = '';
     players.forEach(function (p) {
@@ -349,6 +360,7 @@
 
   // --- Results ---
 
+  // Display final race results
   function showResults(standings) {
     if (timer) timer.stop();
     if (progressThrottleId) {
@@ -386,6 +398,7 @@
     window.showScreen(mpResultsScreen);
   }
 
+  // Escape HTML characters for safe display
   function escapeHTML(str) {
     var div = document.createElement('div');
     div.textContent = str;
@@ -394,6 +407,7 @@
 
   // --- Room management ---
 
+  // Leave current room and reset state
   function leaveRoom() {
     if (ws && roomCode) {
       send({ type: 'leave_room' });
@@ -441,6 +455,7 @@
     send({ type: 'join_room', roomCode: code, playerName: playerName });
   });
 
+  // Copy text to clipboard with fallback
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text);

@@ -17,6 +17,7 @@
   let timerStarted = false;
   let lastPassageIndex = -1;
 
+  // Show specified screen by adding active class
   function showScreen(screen) {
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.remove('active');
@@ -37,6 +38,7 @@
     return PASSAGES[index];
   }
 
+  // Initialize and start a new solo game
   function startGame() {
     const passage = pickPassage();
     timerStarted = false;
@@ -55,6 +57,7 @@
     typingInput.focus();
   }
 
+  // Update timer display and styling
   function onTick(remaining, elapsed) {
     timerDisplay.textContent = remaining;
     timerDisplay.className = 'timer';
@@ -65,10 +68,12 @@
     }
   }
 
+  // Handle timer expiration
   function onTimeUp() {
     finishGame();
   }
 
+  // Calculate and display live WPM and accuracy
   function updateLiveStats() {
     const stats = engine.getStats();
     const elapsed = timer.getElapsed();
@@ -80,6 +85,7 @@
     liveAccuracy.textContent = accuracy + '%';
   }
 
+  // End game and show results
   function finishGame() {
     timer.stop();
     typingInput.disabled = true;

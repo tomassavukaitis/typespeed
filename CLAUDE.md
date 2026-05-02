@@ -9,6 +9,9 @@ No build tools or bundlers. The frontend is pure HTML/CSS/JS. The multiplayer se
 - **Solo mode only:** Open `index.html` via `file://` or `python3 -m http.server 8000`.
 - **With multiplayer:** Run `node server.js` (starts Express + WebSocket server on port 3000), then open `http://localhost:3000`.
 
+**Code Style:**
+- Always add basic comments to functions, classes, and complex logic for clarity and maintainability.
+
 ## Architecture
 
 TypeSpeed is a 60-second typing speed test with solo and multiplayer modes. Seven screens (Start, Typing, Results, MP Menu, MP Lobby, MP Race, MP Results) are all in `index.html`, toggled by adding/removing the `.active` class.

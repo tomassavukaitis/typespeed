@@ -23,6 +23,7 @@ function generateCode() {
   return code;
 }
 
+// Create a new room with the given host
 function createRoom(hostId, playerName) {
   let code;
   do { code = generateCode(); } while (rooms.has(code));
@@ -55,6 +56,7 @@ function createRoom(hostId, playerName) {
   return room;
 }
 
+// Convert room players map to array for sending to clients
 function getPlayersArray(room) {
   return Array.from(room.players.values()).map(p => ({
     id: p.id,
@@ -68,6 +70,7 @@ function getPlayersArray(room) {
   }));
 }
 
+// Send message to all players in room except optional excludeId
 function broadcast(room, message, excludeId) {
   const data = JSON.stringify(message);
   for (const [connId] of room.players) {
@@ -79,6 +82,7 @@ function broadcast(room, message, excludeId) {
   }
 }
 
+// Send message to specific connection
 function sendTo(connId, message) {
   const client = clients.get(connId);
   if (client && client.readyState === 1) {
@@ -86,6 +90,7 @@ function sendTo(connId, message) {
   }
 }
 
+// Clean up room timers and remove from memory
 function cleanupRoom(room) {
   if (room.countdownTimer) clearTimeout(room.countdownTimer);
   if (room.raceTimer) clearTimeout(room.raceTimer);
@@ -93,6 +98,7 @@ function cleanupRoom(room) {
   rooms.delete(room.code);
 }
 
+// Promote a new host when current host leaves
 function promoteHost(room) {
   const remaining = Array.from(room.players.keys());
   if (remaining.length === 0) {
@@ -107,6 +113,7 @@ function promoteHost(room) {
   });
 }
 
+// Check if all players in room have finished the race
 function checkAllFinished(room) {
   for (const p of room.players.values()) {
     if (!p.finished) return false;
@@ -114,6 +121,7 @@ function checkAllFinished(room) {
   return true;
 }
 
+// End the race and broadcast final standings
 function finishRace(room) {
   if (room.state === 'finished') return;
   room.state = 'finished';
@@ -222,6 +230,7 @@ wss.on('connection', (ws) => {
   });
 });
 
+// Main message handler for client messages
 function handleMessage(connId, msg) {
   switch (msg.type) {
     case 'create_room': {

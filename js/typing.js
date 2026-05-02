@@ -91,6 +91,7 @@ class TypingEngine {
     return this.finished;
   }
 
+  // Get current typing statistics
   getStats() {
     return {
       correctCount: this.correctCount,
@@ -119,6 +120,7 @@ class TypingEngine {
     return html;
   }
 
+  // Escape HTML characters for safe display
   escapeHTML(str) {
     const div = document.createElement('div');
     div.textContent = str;
