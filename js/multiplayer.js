@@ -229,6 +229,7 @@
 
   // --- Race ---
 
+  // Initialize race with given passage and start typing
   function startRace(passageIndex) {
     mpCountdownOverlay.style.display = 'none';
     mpTypingInput.disabled = false;
