@@ -10,6 +10,7 @@ class Timer {
     this.elapsed = 0;
   }
 
+  // Start the countdown timer
   start() {
     if (this.running) return;
     this.running = true;
@@ -29,6 +30,7 @@ class Timer {
     }, 100);
   }
 
+  // Stop the timer
   stop() {
     if (!this.running) return;
     this.running = false;
@@ -37,6 +39,7 @@ class Timer {
     this.intervalId = null;
   }
 
+  // Get elapsed time in seconds
   getElapsed() {
     if (!this.startTime) return 0;
     if (this.running) {
@@ -45,6 +48,7 @@ class Timer {
     return this.elapsed;
   }
 
+  // Reset timer to initial state
   reset() {
     this.stop();
     this.startTime = null;
