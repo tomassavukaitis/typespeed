@@ -183,7 +183,7 @@ body {
 }
 
 .passage-display .char {
-  color: var(--text-muted);
+  color: #c0caf5;
   position: relative;
 }
 
@@ -308,7 +308,7 @@ body {
 }
 
 .passage-review .char-untyped {
-  color: var(--text-muted);
+  color: #c0caf5;
 }
 
 /* Multiplayer Menu */
