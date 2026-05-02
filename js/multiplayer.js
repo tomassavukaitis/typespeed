@@ -50,19 +50,27 @@
   // --- WebSocket ---
 
   let pendingMessages = [];
+  let reconnectAttempts = 0;
+  var MAX_RECONNECT_ATTEMPTS = 3;
+  var RECONNECT_DELAY = 1000;
 
-  function connectWS() {
-    if (ws && ws.readyState <= 1) return;
+  function connectWS(onOpenCallback) {
+    if (ws && ws.readyState <= 1) {
+      if (onOpenCallback) onOpenCallback();
+      return;
+    }
 
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
     ws = new WebSocket(protocol + '//' + location.host);
 
     ws.onopen = function () {
+      reconnectAttempts = 0;
       // Flush any messages that were queued before the connection opened
       pendingMessages.forEach(function (m) {
         ws.send(JSON.stringify(m));
       });
       pendingMessages = [];
+      if (onOpenCallback) onOpenCallback();
     };
 
     ws.onmessage = function (e) {
@@ -77,7 +85,19 @@
 
     ws.onclose = function () {
       ws = null;
-      if (roomCode) {
+      if (roomCode && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+        // Attempt to reconnect and rejoin the room
+        var savedRoom = roomCode;
+        var savedName = playerName;
+        reconnectAttempts++;
+        showError(lobbyError, 'Reconnecting... (attempt ' + reconnectAttempts + ')');
+        setTimeout(function () {
+          connectWS(function () {
+            send({ type: 'rejoin_room', roomCode: savedRoom, playerName: savedName });
+          });
+        }, RECONNECT_DELAY);
+      } else if (roomCode) {
+        // Exhausted reconnect attempts
         showError(menuError, 'Connection lost.');
         leaveRoom();
         window.showScreen(mpMenuScreen);
@@ -109,6 +129,13 @@
         playerId = msg.playerId;
         roomCode = msg.roomCode;
         isHost = false;
+        showLobby(msg.roomCode, msg.players);
+        break;
+
+      case 'room_rejoined':
+        playerId = msg.playerId;
+        roomCode = msg.roomCode;
+        isHost = msg.isHost;
         showLobby(msg.roomCode, msg.players);
         break;
 

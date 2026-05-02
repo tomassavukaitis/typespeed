@@ -149,9 +149,30 @@ const clients = new Map(); // connId -> ws
 const connRooms = new Map(); // connId -> roomCode
 let nextConnId = 1;
 
+// --- Ping/pong heartbeat to detect dead connections ---
+
+const HEARTBEAT_INTERVAL = 10000; // 10 seconds
+
+setInterval(() => {
+  for (const [connId, ws] of clients) {
+    if (ws.isAlive === false) {
+      // Missed a pong — connection is dead
+      ws.terminate();
+      continue;
+    }
+    ws.isAlive = false;
+    ws.ping();
+  }
+}, HEARTBEAT_INTERVAL);
+
 wss.on('connection', (ws) => {
   const connId = 'p' + nextConnId++;
   clients.set(connId, ws);
+  ws.isAlive = true;
+
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
 
   ws.on('message', (raw) => {
     let msg;
@@ -344,6 +365,44 @@ function handleMessage(connId, msg) {
       if (checkAllFinished(room)) {
         finishRace(room);
       }
+      break;
+    }
+
+    case 'rejoin_room': {
+      const code = String(msg.roomCode || '').trim().toUpperCase();
+      const name = String(msg.playerName || '').trim().slice(0, 16);
+      if (!name) return sendTo(connId, { type: 'error', message: 'Name is required.' });
+
+      const room = rooms.get(code);
+      if (!room) return sendTo(connId, { type: 'error', message: 'Room not found.' });
+      if (room.state === 'finished') return sendTo(connId, { type: 'error', message: 'Race already finished.' });
+      if (room.players.size >= 10) return sendTo(connId, { type: 'error', message: 'Room is full (max 10).' });
+
+      room.players.set(connId, {
+        id: connId,
+        name,
+        progress: 0,
+        wpm: 0,
+        accuracy: 100,
+        finished: false,
+        placement: null,
+      });
+      connRooms.set(connId, code);
+      room.lastActivity = Date.now();
+
+      sendTo(connId, {
+        type: 'room_rejoined',
+        roomCode: code,
+        playerId: connId,
+        players: getPlayersArray(room),
+        isHost: room.hostId === connId,
+      });
+
+      broadcast(room, {
+        type: 'player_joined',
+        player: { id: connId, name, isHost: false },
+        players: getPlayersArray(room),
+      }, connId);
       break;
     }
 
