@@ -57,5 +57,6 @@ To tear down: `cd terraform && terraform destroy`.
 
 Each set of changes gets its own branch — do not reuse old feature branches.
 - Create a new branch from `main` before committing: `feature/<description>` or `fix/<description>`
+- Do not reuse an existing branch for new work; start a fresh branch for every GitHub push.
 - Push the branch with `git push -u origin <branch-name>`
 - **Never merge into `main` or push directly to `main`** — only push feature/fix branches and let the user merge via GitHub
