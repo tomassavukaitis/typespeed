@@ -8,6 +8,7 @@ A 60-second typing speed test. Pick a passage, type as fast and accurately as yo
 - Live WPM and accuracy stats while you type
 - Timer starts on your first keystroke so you can read the passage first
 - Detailed results breakdown with passage review highlighting correct and incorrect characters
+- **Multiplayer** — Create or join a room (6-char code), race against friends in real time with live progress bars and standings
 
 ## Prerequisites
 
@@ -20,7 +21,7 @@ For other deployment methods:
 
 ## Running Locally
 
-Open `index.html` directly in your browser, or serve it with any static file server:
+**Solo mode only** — open `index.html` directly in your browser, or use any static file server:
 
 ```bash
 python3 -m http.server 8000
@@ -28,14 +29,23 @@ python3 -m http.server 8000
 
 Then open `http://localhost:8000`.
 
+**With multiplayer** — requires Node.js:
+
+```bash
+npm install
+node server.js
+```
+
+Then open `http://localhost:3000`.
+
 ## Running with Docker
 
 ```bash
 docker build -t typespeed .
-docker run -d -p 8080:80 typespeed
+docker run -d -p 3000:3000 typespeed
 ```
 
-Then open `http://localhost:8080`.
+Then open `http://localhost:3000`.
 
 ## Deploying to AWS
 
@@ -91,15 +101,18 @@ terraform destroy
 ## Project Structure
 
 ```
-index.html          — Single-page app (Start → Typing → Results screens)
+index.html          — Single-page app (all screens)
 css/style.css       — Styles
 js/
   passages.js       — 100 typing passages
   timer.js          — 60-second countdown timer
   scoring.js        — WPM and accuracy calculations
   typing.js         — Input handling and passage rendering
-  app.js            — Main controller, screen transitions
-Dockerfile          — Nginx-based container image
+  app.js            — Solo mode controller, screen transitions
+  multiplayer.js    — Multiplayer client (WebSocket, lobby, race, results)
+server.js           — Node.js server (Express static files + WebSocket)
+package.json        — Node.js dependencies (express, ws)
+Dockerfile          — Node.js container image
 terraform/          — AWS infrastructure (Terraform)
 ansible/            — Deployment playbook (Ansible)
 ```
