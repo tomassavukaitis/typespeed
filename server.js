@@ -415,6 +415,35 @@ function handleMessage(connId, msg) {
       break;
     }
 
+    case 'play_again': {
+      const code = connRooms.get(connId);
+      if (!code) return;
+      const room = rooms.get(code);
+      if (!room) return;
+      if (room.state !== 'finished') return;
+
+      // Reset room state for a new round
+      room.state = 'waiting';
+      room.passageIndex = null;
+      room.nextPlacement = 1;
+      room.lastActivity = Date.now();
+
+      // Reset all player stats
+      for (const p of room.players.values()) {
+        p.progress = 0;
+        p.wpm = 0;
+        p.accuracy = 100;
+        p.finished = false;
+        p.placement = null;
+      }
+
+      broadcast(room, {
+        type: 'back_to_lobby',
+        players: getPlayersArray(room),
+      });
+      break;
+    }
+
     case 'leave_room': {
       const leaveCode = connRooms.get(connId);
       if (!leaveCode) return;

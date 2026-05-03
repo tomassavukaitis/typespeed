@@ -179,6 +179,14 @@
         showResults(msg.standings);
         break;
 
+      case 'back_to_lobby':
+        // Room has been reset for a new round
+        engine = null;
+        timer = null;
+        timerStarted = false;
+        showLobby(roomCode, msg.players);
+        break;
+
       case 'error':
         // Show error in the most relevant place
         if (mpLobbyScreen.classList.contains('active')) {
@@ -533,14 +541,9 @@
   });
 
   mpPlayAgainBtn.addEventListener('click', function () {
-    // Go back to lobby if still connected
-    if (ws && ws.readyState === 1) {
-      // Reset race state
-      engine = null;
-      timer = null;
-      connectWS();
-      menuError.style.display = 'none';
-      window.showScreen(mpMenuScreen);
+    // Go back to lobby if still connected to the room
+    if (ws && ws.readyState === 1 && roomCode) {
+      send({ type: 'play_again' });
     } else {
       window.showScreen(document.getElementById('start-screen'));
     }
