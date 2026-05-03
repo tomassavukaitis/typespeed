@@ -106,7 +106,8 @@
         restart_policy: always
         ports:
           - "80:3000"
+          - "443:3443"
 
     - name: Show app URL
       ansible.builtin.debug:
-        msg: "App is live at http://{{ inventory_hostname }}"
+        msg: "App is live at https://{{ inventory_hostname }}"

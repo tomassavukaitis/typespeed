@@ -55,12 +55,20 @@ resource "local_file" "ssh_key" {
 # Security group: allow HTTP and SSH inbound, all outbound
 resource "aws_security_group" "typespeed" {
   name        = "typespeed-sg"
-  description = "Allow HTTP and SSH inbound"
+  description = "Allow HTTP, HTTPS, and SSH inbound"
 
   ingress {
     description = "HTTP"
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTPS"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

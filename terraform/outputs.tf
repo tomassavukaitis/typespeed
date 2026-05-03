@@ -5,7 +5,7 @@ output "public_ip" {
 
 output "url" {
   description = "URL to access the app"
-  value       = "http://${aws_instance.typespeed.public_ip}"
+  value       = "https://${aws_instance.typespeed.public_ip}"
 }
 
 output "ssh_private_key_file" {
