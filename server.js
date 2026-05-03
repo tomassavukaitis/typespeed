@@ -1,4 +1,6 @@
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const path = require('path');
@@ -7,10 +9,40 @@ const PASSAGES = require('./js/passages.js');
 const app = express();
 app.use(express.static(path.join(__dirname)));
 
-const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const HTTP_PORT = process.env.PORT || 3000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
-const PORT = process.env.PORT || 3000;
+// Determine if SSL certs are available
+const certPath = path.join(__dirname, 'certs', 'cert.pem');
+const keyPath = path.join(__dirname, 'certs', 'key.pem');
+const sslAvailable = fs.existsSync(certPath) && fs.existsSync(keyPath);
+
+let server;
+
+if (sslAvailable) {
+  // HTTPS mode: main server is HTTPS, HTTP redirects to HTTPS
+  const sslOptions = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+  server = https.createServer(sslOptions, app);
+
+  // HTTP server that redirects all requests to HTTPS
+  const redirectApp = express();
+  redirectApp.use((req, res) => {
+    const host = req.headers.host ? req.headers.host.replace(/:.*/, '') : req.hostname;
+    res.redirect(301, `https://${host}${req.url}`);
+  });
+  const httpServer = http.createServer(redirectApp);
+  httpServer.listen(HTTP_PORT, () => {
+    console.log('HTTP redirect server running on port ' + HTTP_PORT);
+  });
+} else {
+  // Fallback: plain HTTP (local development without certs)
+  server = http.createServer(app);
+}
+
+const wss = new WebSocketServer({ server });
 
 // --- Room state ---
 
@@ -484,6 +516,7 @@ setInterval(() => {
   }
 }, 60000);
 
-server.listen(PORT, () => {
-  console.log('TypeSpeed server running on port ' + PORT);
+const listenPort = sslAvailable ? HTTPS_PORT : HTTP_PORT;
+server.listen(listenPort, () => {
+  console.log('TypeSpeed server running on port ' + listenPort + (sslAvailable ? ' (HTTPS)' : ' (HTTP)'));
 });
