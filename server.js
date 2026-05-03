@@ -128,12 +128,13 @@ function finishRace(room) {
   if (room.broadcastInterval) clearInterval(room.broadcastInterval);
   if (room.raceTimer) clearTimeout(room.raceTimer);
 
-  // Mark unfinished players with their current progress
-  for (const p of room.players.values()) {
-    if (!p.finished) {
-      p.finished = true;
-      p.placement = room.nextPlacement++;
-    }
+  // Rank unfinished players by WPM (descending), then accuracy (descending)
+  const unfinished = Array.from(room.players.values())
+    .filter(p => !p.finished)
+    .sort((a, b) => b.wpm - a.wpm || b.accuracy - a.accuracy);
+  for (const p of unfinished) {
+    p.finished = true;
+    p.placement = room.nextPlacement++;
   }
 
   const standings = Array.from(room.players.values())
