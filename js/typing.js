@@ -8,8 +8,10 @@ class TypingEngine {
     this.totalMistakes = 0;      // Cumulative unique mistakes (not reset by backspace)
     this.totalKeystrokes = 0;    // Forward keystrokes only (backspaces excluded)
     this.everIncorrect = new Set(); // Tracks positions ever mistyped to avoid double-counting
+    this.mistakeDetails = [];    // Array of { expected, actual } for each mistype event
     this.previousLength = 0;     // Previous input length to detect forward vs backward typing
     this.currentIndex = 0;
+    this.hasCurrentError = false; // True if the last typed character is incorrect (blocks forward typing)
     this.finished = false;
 
     this._renderPassage();
@@ -41,10 +43,14 @@ class TypingEngine {
 
     // Only count new forward keystrokes, not backspaces
     if (typedText.length > this.previousLength) {
-      const newChars = typedText.length - this.previousLength;
       for (let i = this.previousLength; i < typedText.length; i++) {
         this.totalKeystrokes++;
         if (i < this.passage.length && typedText[i] !== this.passage[i]) {
+          // Record mistake details for post-game analysis
+          this.mistakeDetails.push({
+            expected: this.passage[i],
+            actual: typedText[i],
+          });
           if (!this.everIncorrect.has(i)) {
             this.everIncorrect.add(i);
             this.totalMistakes++;
@@ -71,6 +77,11 @@ class TypingEngine {
       }
     }
 
+    // Check if the last typed character is an error (used to block forward typing)
+    this.hasCurrentError = typedText.length > 0 &&
+      typedText.length <= this.passage.length &&
+      typedText[typedText.length - 1] !== this.passage[typedText.length - 1];
+
     // Auto-scroll to keep current position visible
     const target = this.spans[this.currentIndex] || this.spans[this.spans.length - 1];
     if (target) {
@@ -91,13 +102,13 @@ class TypingEngine {
     return this.finished;
   }
 
-  // Get current typing statistics
+  // Get current typing statistics (position-based to prevent backspace-spam exploits)
   getStats() {
     return {
       correctCount: this.correctCount,
       incorrectCount: this.incorrectCount,
-      totalMistakes: this.totalMistakes,
-      totalKeystrokes: this.totalKeystrokes,
+      totalMistakes: this.everIncorrect.size,
+      totalKeystrokes: this.currentIndex,  // Net positions reached, not raw keystrokes
       totalChars: this.passage.length,
     };
   }
@@ -118,6 +129,28 @@ class TypingEngine {
       }
     }
     return html;
+  }
+
+  // Aggregate mistake data for post-game analysis
+  getMistakeAnalysis() {
+    // Count mistyped pairs (expected -> actual)
+    const pairCounts = {};
+
+    this.mistakeDetails.forEach(function (m) {
+      const pairKey = m.expected + '→' + m.actual;
+      pairCounts[pairKey] = (pairCounts[pairKey] || 0) + 1;
+    });
+
+    // Sort mistyped pairs by frequency
+    const mistypedPairs = Object.keys(pairCounts).map(function (key) {
+      const parts = key.split('→');
+      return { expected: parts[0], actual: parts[1], count: pairCounts[key] };
+    }).sort(function (a, b) { return b.count - a.count; });
+
+    return {
+      mistypedPairs: mistypedPairs,
+      totalMistakes: this.mistakeDetails.length,
+    };
   }
 
   // Escape HTML characters for safe display

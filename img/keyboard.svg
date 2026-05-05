@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" opacity="0.12">
+  <!-- Stylized keyboard illustration -->
+  <rect x="20" y="40" width="360" height="140" rx="12" fill="none" stroke="#a78bfa" stroke-width="2"/>
+  <!-- Row 1 -->
+  <rect x="35" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="67" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="99" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="131" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="163" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="195" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="227" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="259" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="291" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="323" y="55" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <!-- Row 2 -->
+  <rect x="42" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="74" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="106" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="138" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="170" y="84" width="28" height="24" rx="4" fill="#7c3aed"/>
+  <rect x="202" y="84" width="28" height="24" rx="4" fill="#7c3aed"/>
+  <rect x="234" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="266" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="298" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="330" y="84" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <!-- Row 3 -->
+  <rect x="50" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="82" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="114" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="146" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="178" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="210" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="242" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="274" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <rect x="306" y="113" width="28" height="24" rx="4" fill="#a78bfa"/>
+  <!-- Spacebar -->
+  <rect x="100" y="145" width="200" height="24" rx="4" fill="#7c3aed"/>
+</svg>

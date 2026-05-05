@@ -12,6 +12,11 @@
     <div class="start-container">
       <h1 class="title">TypeSpeed</h1>
       <p class="subtitle">Test your typing speed and accuracy</p>
+      <div class="duration-selector" id="solo-duration-selector">
+        <button class="duration-btn" data-duration="30">30s</button>
+        <button class="duration-btn active" data-duration="60">60s</button>
+        <button class="duration-btn" data-duration="120">2 min</button>
+      </div>
       <div class="start-buttons">
         <button id="start-btn" class="btn btn-primary">Solo</button>
         <button id="multiplayer-btn" class="btn btn-secondary">Multiplayer</button>
@@ -63,6 +68,15 @@
         <div class="breakdown-item"><span class="breakdown-label">Incorrect Characters</span><span id="result-incorrect-chars">0</span></div>
         <div class="breakdown-item"><span class="breakdown-label">Total Words</span><span id="result-total-words">0</span></div>
       </div>
+      <div id="mistake-analysis" style="display:none">
+        <h3 class="review-title">Mistake Analysis</h3>
+        <div class="analysis-card" style="max-width:400px;margin:0 auto 2rem">
+          <table class="analysis-table">
+            <thead><tr><th>Expected</th><th>Typed</th><th>Count</th></tr></thead>
+            <tbody id="mistyped-pairs-body"></tbody>
+          </table>
+        </div>
+      </div>
       <h3 class="review-title">Passage Review</h3>
       <div id="passage-review" class="passage-review"></div>
       <button id="retry-btn" class="btn btn-primary">Try Again</button>
@@ -104,6 +118,14 @@
       <div class="mp-lobby-player-list">
         <span class="mp-label">Players</span>
         <div id="mp-lobby-players"></div>
+      </div>
+      <div class="mp-lobby-duration">
+        <span class="mp-label">Race Duration</span>
+        <div class="duration-selector" id="lobby-duration-selector">
+          <button class="duration-btn" data-duration="30">30s</button>
+          <button class="duration-btn active" data-duration="60">60s</button>
+          <button class="duration-btn" data-duration="120">2 min</button>
+        </div>
       </div>
       <div id="mp-lobby-error" class="mp-error" style="display:none"></div>
       <div class="mp-lobby-actions">

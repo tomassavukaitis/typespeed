@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" opacity="0.10">
+  <!-- Stylized hands over keyboard -->
+  <!-- Left hand -->
+  <path d="M80 180 C80 160, 90 140, 100 130 L105 90 C105 82, 112 78, 118 82 L120 125 L125 80 C125 72, 132 68, 138 72 L140 125 L145 75 C145 67, 152 63, 158 67 L160 125 L162 85 C162 77, 169 73, 175 77 L177 130 C177 130, 185 135, 185 150 L185 180 C185 200, 170 215, 145 215 L120 215 C95 215, 80 200, 80 180Z" fill="#a78bfa" stroke="none"/>
+  <!-- Right hand -->
+  <path d="M320 180 C320 160, 330 140, 340 130 L345 90 C345 82, 352 78, 358 82 L360 125 L365 80 C365 72, 372 68, 378 72 L380 125 L385 75 C385 67, 392 63, 398 67 L400 125 L402 85 C402 77, 409 73, 415 77 L417 130 C417 130, 425 135, 425 150 L425 180 C425 200, 410 215, 385 215 L360 215 C335 215, 320 200, 320 180Z" fill="#a78bfa" stroke="none"/>
+  <!-- Speed lines -->
+  <line x1="200" y1="100" x2="300" y2="100" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+  <line x1="210" y1="120" x2="290" y2="120" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="220" y1="140" x2="280" y2="140" stroke="#7c3aed" stroke-width="1" stroke-linecap="round"/>
+  <!-- Floating letters -->
+  <text x="190" y="70" font-family="monospace" font-size="18" fill="#7c3aed">w</text>
+  <text x="230" y="55" font-family="monospace" font-size="22" fill="#a78bfa">p</text>
+  <text x="270" y="65" font-family="monospace" font-size="16" fill="#7c3aed">m</text>
+  <text x="250" y="85" font-family="monospace" font-size="20" fill="#a78bfa">s</text>
+</svg>
