@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Floating particles background -->
+  <div class="particles" id="particles"></div>
+
   <!-- Screen 1: Start -->
   <div id="start-screen" class="screen active">
     <div class="start-container">
@@ -195,6 +198,28 @@
       </div>
     </div>
   </div>
+
+  <!-- Spawn floating particles -->
+  <script>
+  (function() {
+    var container = document.getElementById('particles');
+    var count = 20;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'particle';
+      var size = Math.random() * 4 + 2;
+      var left = Math.random() * 100;
+      var duration = Math.random() * 15 + 10;
+      var delay = Math.random() * 15;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = left + '%';
+      p.style.animationDuration = duration + 's';
+      p.style.animationDelay = delay + 's';
+      container.appendChild(p);
+    }
+  })();
+  </script>
 
   <script src="js/passages.js"></script>
   <script src="js/timer.js"></script>
