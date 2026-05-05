@@ -11,11 +11,29 @@
   const timerDisplay = document.getElementById('timer');
   const liveWpm = document.getElementById('live-wpm');
   const liveAccuracy = document.getElementById('live-accuracy');
+  const soloDurationSelector = document.getElementById('solo-duration-selector');
 
   let engine = null;
   let timer = null;
   let timerStarted = false;
   let lastPassageIndex = -1;
+  let selectedDuration = 60;
+
+  // Duration selector click handler
+  soloDurationSelector.addEventListener('click', function (e) {
+    const btn = e.target.closest('.duration-btn');
+    if (!btn) return;
+    soloDurationSelector.querySelector('.duration-btn.active').classList.remove('active');
+    btn.classList.add('active');
+    selectedDuration = parseInt(btn.dataset.duration, 10);
+  });
+
+  // Escape HTML characters for safe display
+  function escapeHTML(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
   // Show specified screen by adding active class
   function showScreen(screen) {
@@ -45,9 +63,9 @@
 
     engine = new TypingEngine(passage, passageDisplay);
 
-    timer = new Timer(60, onTick, onTimeUp);
+    timer = new Timer(selectedDuration, onTick, onTimeUp);
 
-    timerDisplay.textContent = '60';
+    timerDisplay.textContent = selectedDuration;
     timerDisplay.className = 'timer';
     liveWpm.textContent = '0';
     liveAccuracy.textContent = '100%';
@@ -106,6 +124,31 @@
 
     document.getElementById('passage-review').innerHTML = engine.getReviewHTML();
 
+    // Populate mistake analysis section
+    const analysis = engine.getMistakeAnalysis();
+    const analysisEl = document.getElementById('mistake-analysis');
+
+    if (analysis.totalMistakes > 0) {
+      analysisEl.style.display = 'block';
+
+      // Mistyped pairs table (show top 5)
+      const pairsBody = document.getElementById('mistyped-pairs-body');
+      pairsBody.innerHTML = '';
+      analysis.mistypedPairs.slice(0, 5).forEach(function (pair) {
+        const tr = document.createElement('tr');
+        var expectedLabel = pair.expected === ' ' ? 'space' : pair.expected;
+        var actualLabel = pair.actual === ' ' ? 'space' : pair.actual;
+        tr.innerHTML =
+          '<td><span class="analysis-key">' + escapeHTML(expectedLabel) + '</span></td>' +
+          '<td><span class="analysis-key analysis-key-wrong">' + escapeHTML(actualLabel) + '</span></td>' +
+          '<td>' + pair.count + '</td>';
+        pairsBody.appendChild(tr);
+      });
+
+    } else {
+      analysisEl.style.display = 'none';
+    }
+
     showScreen(resultsScreen);
   }
 
@@ -121,6 +164,13 @@
 
     if (finished) {
       finishGame();
+    }
+  });
+
+  // Block forward typing when there is an uncorrected error
+  typingInput.addEventListener('keydown', function (e) {
+    if (engine && engine.hasCurrentError && e.key !== 'Backspace') {
+      e.preventDefault();
     }
   });
 

@@ -9,6 +9,7 @@
   let timer = null;
   let timerStarted = false;
   let progressThrottleId = null;
+  let raceDuration = 60;
 
   // --- DOM references ---
 
@@ -30,6 +31,7 @@
   const lobbyStartBtn = document.getElementById('mp-lobby-start-btn');
   const lobbyLeaveBtn = document.getElementById('mp-lobby-leave-btn');
   const lobbyError = document.getElementById('mp-lobby-error');
+  const lobbyDurationSelector = document.getElementById('lobby-duration-selector');
 
   const mpPassageDisplay = document.getElementById('mp-passage-display');
   const mpTypingInput = document.getElementById('mp-typing-input');
@@ -154,6 +156,7 @@
         isHost = msg.hostId === playerId;
         if (msg.players) renderLobbyPlayers(msg.players);
         lobbyStartBtn.style.display = isHost ? '' : 'none';
+        lobbyDurationSelector.classList.toggle('disabled', !isHost);
         break;
 
       case 'countdown':
@@ -164,6 +167,7 @@
         break;
 
       case 'race_start':
+        raceDuration = msg.duration || 60;
         startRace(msg.passageIndex);
         break;
 
@@ -207,12 +211,24 @@
     setTimeout(function () { el.style.display = 'none'; }, 4000);
   }
 
+  // Duration selector click handler (host only)
+  lobbyDurationSelector.addEventListener('click', function (e) {
+    if (!isHost) return;
+    const btn = e.target.closest('.duration-btn');
+    if (!btn) return;
+    lobbyDurationSelector.querySelector('.duration-btn.active').classList.remove('active');
+    btn.classList.add('active');
+    raceDuration = parseInt(btn.dataset.duration, 10);
+  });
+
   // Display lobby screen with room code and players
   function showLobby(code, players) {
     menuError.style.display = 'none';
     lobbyError.style.display = 'none';
     lobbyCode.textContent = code;
     lobbyStartBtn.style.display = isHost ? '' : 'none';
+    // Show duration selector for host, disable for non-host
+    lobbyDurationSelector.classList.toggle('disabled', !isHost);
     renderLobbyPlayers(players);
     window.showScreen(mpLobbyScreen);
   }
@@ -254,10 +270,10 @@
     engine = new TypingEngine(passage, mpPassageDisplay);
 
     timerStarted = true;
-    timer = new Timer(60, onRaceTick, onRaceTimeUp);
+    timer = new Timer(raceDuration, onRaceTick, onRaceTimeUp);
     timer.start();
 
-    mpTimerDisplay.textContent = '60';
+    mpTimerDisplay.textContent = raceDuration;
     mpTimerDisplay.className = 'timer';
     mpLiveWpm.textContent = '0';
     mpLiveAccuracy.textContent = '100%';
@@ -512,7 +528,7 @@
   });
 
   lobbyStartBtn.addEventListener('click', function () {
-    send({ type: 'start_game' });
+    send({ type: 'start_game', duration: raceDuration });
   });
 
   lobbyLeaveBtn.addEventListener('click', function () {
@@ -529,6 +545,13 @@
 
     if (finished) {
       finishRace();
+    }
+  });
+
+  // Block forward typing when there is an uncorrected error
+  mpTypingInput.addEventListener('keydown', function (e) {
+    if (engine && engine.hasCurrentError && e.key !== 'Backspace') {
+      e.preventDefault();
     }
   });
 

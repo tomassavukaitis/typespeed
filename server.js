@@ -327,6 +327,11 @@ function handleMessage(connId, msg) {
       if (room.state !== 'waiting') return;
       if (room.players.size < 2) return sendTo(connId, { type: 'error', message: 'Need at least 2 players.' });
 
+      // Validate duration (30, 60, or 120 seconds)
+      const allowedDurations = [30, 60, 120];
+      const duration = allowedDurations.includes(Number(msg.duration)) ? Number(msg.duration) : 60;
+      room.duration = duration;
+
       room.state = 'countdown';
       room.passageIndex = Math.floor(Math.random() * PASSAGES.length);
       room.nextPlacement = 1;
@@ -347,6 +352,7 @@ function handleMessage(connId, msg) {
           broadcast(room, {
             type: 'race_start',
             passageIndex: room.passageIndex,
+            duration: room.duration,
           });
 
           // Broadcast progress every 200ms
@@ -357,10 +363,10 @@ function handleMessage(connId, msg) {
             });
           }, 200);
 
-          // 60-second race timeout
+          // Race timeout based on selected duration
           room.raceTimer = setTimeout(() => {
             finishRace(room);
-          }, 60000);
+          }, room.duration * 1000);
         }
       }, 1000);
       break;

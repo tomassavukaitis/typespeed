@@ -1,13 +1,16 @@
 # TypeSpeed
 
-A 60-second typing speed test. Pick a passage, type as fast and accurately as you can, and get your WPM and accuracy results.
+A typing speed test with configurable duration. Pick a passage, type as fast and accurately as you can, and get your WPM, accuracy, and mistake analysis results.
 
 ## Features
 
-- 100 built-in passages of varying difficulty
+- 100 built-in passages with uniformly mixed word lengths (2–12 characters)
+- Configurable race duration (30s, 60s, 2 min) for both solo and multiplayer
 - Live WPM and accuracy stats while you type
 - Timer starts on your first keystroke so you can read the passage first
+- **Typo blocking** — mistakes must be corrected with backspace before you can continue; errors still count against accuracy
 - Detailed results breakdown with passage review highlighting correct and incorrect characters
+- **Mistake analysis** — post-game breakdown showing which keys you mistyped and how often
 - **Multiplayer** — Create or join a room (6-char code), race against friends in real time with live progress bars and standings
 
 ## Prerequisites
@@ -103,12 +106,13 @@ terraform destroy
 ```
 index.html          — Single-page app (all screens)
 css/style.css       — Styles
+img/                — Background SVG illustrations (keyboard, hands)
 js/
-  passages.js       — 100 typing passages
-  timer.js          — 60-second countdown timer
+  passages.js       — 100 typing passages (mixed word lengths, 2–12 chars)
+  timer.js          — Configurable countdown timer
   scoring.js        — WPM and accuracy calculations
-  typing.js         — Input handling and passage rendering
-  app.js            — Solo mode controller, screen transitions
+  typing.js         — Input handling, passage rendering, typo blocking, mistake tracking
+  app.js            — Solo mode controller, screen transitions, mistake analysis
   multiplayer.js    — Multiplayer client (WebSocket, lobby, race, results)
 server.js           — Node.js server (Express static files + WebSocket)
 package.json        — Node.js dependencies (express, ws)
