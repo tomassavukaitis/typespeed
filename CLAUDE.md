@@ -57,6 +57,10 @@ ansible-playbook deploy.yml
 
 To tear down: `cd terraform && terraform destroy`.
 
+## Documentation
+
+After any significant changes to features, architecture, or project structure, update `README.md` to reflect those changes before committing.
+
 ## Git Workflow
 
 Each set of changes gets its own branch — do not reuse old feature branches.

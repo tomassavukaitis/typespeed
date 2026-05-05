@@ -35,12 +35,41 @@
     return div.innerHTML;
   }
 
+  // Animate a number counting up from 0 to target
+  function animateCounter(element, target, suffix, duration) {
+    suffix = suffix || '';
+    duration = duration || 800;
+    var start = 0;
+    var startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      // Ease-out curve for a satisfying deceleration
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(eased * target);
+      element.textContent = current + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
   // Show specified screen by adding active class
   function showScreen(screen) {
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.remove('active');
     });
     screen.classList.add('active');
+
+    // Hide particles during typing screens to avoid distraction
+    var particles = document.getElementById('particles');
+    if (particles) {
+      var isTyping = screen === typingScreen || screen.id === 'mp-typing-screen';
+      particles.classList.toggle('hidden', isTyping);
+    }
   }
 
   // Expose globally so multiplayer.js can switch screens
@@ -115,8 +144,9 @@
     const accuracy = calculateAccuracy(correctKeystrokes, stats.totalKeystrokes);
     const totalWords = stats.totalKeystrokes > 0 ? Math.round(stats.totalKeystrokes / 5) : 0;
 
-    document.getElementById('result-wpm').textContent = wpm;
-    document.getElementById('result-accuracy').textContent = accuracy + '%';
+    // Animate the main result numbers counting up
+    animateCounter(document.getElementById('result-wpm'), wpm, '', 1000);
+    animateCounter(document.getElementById('result-accuracy'), accuracy, '%', 1000);
     document.getElementById('result-total-chars').textContent = stats.totalKeystrokes;
     document.getElementById('result-correct-chars').textContent = correctKeystrokes;
     document.getElementById('result-incorrect-chars').textContent = stats.totalMistakes;
