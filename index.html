@@ -54,6 +54,10 @@
   <!-- Screen 3: Results -->
   <div id="results-screen" class="screen">
     <div class="results-container">
+      <div class="results-top-actions">
+        <button id="home-btn" class="btn btn-small">Home</button>
+        <button id="retry-btn" class="btn btn-primary btn-small">Try Again</button>
+      </div>
       <h2 class="results-title">Results</h2>
       <div class="results-main">
         <div class="result-big">
@@ -71,37 +75,43 @@
         <div class="breakdown-item"><span class="breakdown-label">Incorrect Characters</span><span id="result-incorrect-chars">0</span></div>
         <div class="breakdown-item"><span class="breakdown-label">Total Words</span><span id="result-total-words">0</span></div>
       </div>
-      <div id="mistake-analysis" style="display:none">
-        <h3 class="review-title">Mistake Analysis</h3>
-        <div class="analysis-card" style="max-width:400px;margin:0 auto 2rem">
-          <table class="analysis-table">
-            <thead><tr><th>Expected</th><th>Typed</th><th>Count</th></tr></thead>
-            <tbody id="mistyped-pairs-body"></tbody>
-          </table>
+      <!-- Side-by-side: Mistake Analysis (left) + Leaderboard (right) -->
+      <div class="results-columns">
+        <div class="results-column-left">
+          <div id="mistake-analysis" style="display:none">
+            <h3 class="review-title">Mistake Analysis</h3>
+            <div class="analysis-card">
+              <table class="analysis-table">
+                <thead><tr><th>Expected</th><th>Typed</th><th>Count</th></tr></thead>
+                <tbody id="mistyped-pairs-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="results-column-right">
+          <!-- Highscore name input (solo mode) -->
+          <div id="solo-name-section" class="highscore-name-section" style="display:none">
+            <label class="mp-label" for="solo-name-input">Enter your name for the leaderboard</label>
+            <div class="highscore-name-row">
+              <input id="solo-name-input" class="mp-input" type="text" maxlength="16" placeholder="Your name" autocomplete="off">
+              <button id="solo-submit-score-btn" class="btn btn-primary btn-small">Submit</button>
+            </div>
+          </div>
+          <!-- Highscore table -->
+          <div id="solo-highscore-section" class="highscore-section" style="display:none">
+            <h3 class="review-title">Leaderboard</h3>
+            <table class="highscore-table">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
+              </thead>
+              <tbody id="solo-highscore-body"></tbody>
+            </table>
+            <div id="solo-player-rank" class="player-rank" style="display:none"></div>
+          </div>
         </div>
       </div>
       <h3 class="review-title">Passage Review</h3>
       <div id="passage-review" class="passage-review"></div>
-      <!-- Highscore name input (solo mode) -->
-      <div id="solo-name-section" class="highscore-name-section" style="display:none">
-        <label class="mp-label" for="solo-name-input">Enter your name for the leaderboard</label>
-        <div class="highscore-name-row">
-          <input id="solo-name-input" class="mp-input" type="text" maxlength="16" placeholder="Your name" autocomplete="off">
-          <button id="solo-submit-score-btn" class="btn btn-primary btn-small">Submit</button>
-        </div>
-      </div>
-      <!-- Highscore table -->
-      <div id="solo-highscore-section" class="highscore-section" style="display:none">
-        <h3 class="review-title">Leaderboard</h3>
-        <table class="highscore-table">
-          <thead>
-            <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
-          </thead>
-          <tbody id="solo-highscore-body"></tbody>
-        </table>
-        <div id="solo-player-rank" class="player-rank" style="display:none"></div>
-      </div>
-      <button id="retry-btn" class="btn btn-primary">Try Again</button>
     </div>
   </div>
 
@@ -186,6 +196,10 @@
   <!-- Screen 7: Multiplayer Results -->
   <div id="mp-results-screen" class="screen">
     <div class="results-container">
+      <div class="results-top-actions">
+        <button id="mp-results-leave-btn" class="btn btn-small">Home</button>
+        <button id="mp-play-again-btn" class="btn btn-primary btn-small">Play Again</button>
+      </div>
       <h2 class="results-title">Race Results</h2>
       <div class="results-main">
         <div class="result-big">
@@ -197,35 +211,38 @@
           <span class="result-unit">Accuracy</span>
         </div>
       </div>
-      <h3 class="review-title">Standings</h3>
-      <table class="mp-standings-table">
-        <thead>
-          <tr>
-            <th>Place</th>
-            <th>Name</th>
-            <th>WPM</th>
-            <th>Accuracy</th>
-          </tr>
-        </thead>
-        <tbody id="mp-standings-body"></tbody>
-      </table>
+      <!-- Side-by-side: Standings (left) + Leaderboard (right) -->
+      <div class="results-columns">
+        <div class="results-column-left">
+          <h3 class="review-title">Standings</h3>
+          <table class="mp-standings-table">
+            <thead>
+              <tr>
+                <th>Place</th>
+                <th>Name</th>
+                <th>WPM</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody id="mp-standings-body"></tbody>
+          </table>
+        </div>
+        <div class="results-column-right">
+          <!-- Highscore table (multiplayer) -->
+          <div id="mp-highscore-section" class="highscore-section" style="display:none">
+            <h3 class="review-title">Leaderboard</h3>
+            <table class="highscore-table">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
+              </thead>
+              <tbody id="mp-highscore-body"></tbody>
+            </table>
+            <div id="mp-player-rank" class="player-rank" style="display:none"></div>
+          </div>
+        </div>
+      </div>
       <h3 class="review-title">Passage Review</h3>
       <div id="mp-passage-review" class="passage-review"></div>
-      <!-- Highscore table (multiplayer) -->
-      <div id="mp-highscore-section" class="highscore-section" style="display:none">
-        <h3 class="review-title">Leaderboard</h3>
-        <table class="highscore-table">
-          <thead>
-            <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
-          </thead>
-          <tbody id="mp-highscore-body"></tbody>
-        </table>
-        <div id="mp-player-rank" class="player-rank" style="display:none"></div>
-      </div>
-      <div class="mp-results-actions">
-        <button id="mp-play-again-btn" class="btn btn-primary">Play Again</button>
-        <button id="mp-results-leave-btn" class="btn btn-small">Leave</button>
-      </div>
     </div>
   </div>
 
