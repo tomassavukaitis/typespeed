@@ -909,6 +909,39 @@ body::before {
   font-weight: 600;
 }
 
+/* Top actions bar for results screens (Home + Try Again / Play Again) */
+.results-top-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Side-by-side columns for analysis/standings + leaderboard */
+.results-columns {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.results-column-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.results-column-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Remove old inline max-width from analysis card inside columns */
+.results-columns .analysis-card {
+  max-width: none;
+  margin: 0;
+}
+
 .mp-results-actions {
   display: flex;
   gap: 1rem;
@@ -948,6 +981,10 @@ body::before {
 
   .results-breakdown {
     grid-template-columns: 1fr;
+  }
+
+  .results-columns {
+    flex-direction: column;
   }
 
 

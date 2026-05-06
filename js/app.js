@@ -5,6 +5,7 @@
   const resultsScreen = document.getElementById('results-screen');
   const startBtn = document.getElementById('start-btn');
   const retryBtn = document.getElementById('retry-btn');
+  const homeBtn = document.getElementById('home-btn');
   const restartBtn = document.getElementById('restart-btn');
   const typingInput = document.getElementById('typing-input');
   const passageDisplay = document.getElementById('passage-display');
@@ -273,6 +274,14 @@
     soloNameSection.style.display = 'none';
     soloHighscoreSection.style.display = 'none';
     startGame();
+  });
+  // Home button returns to start screen
+  homeBtn.addEventListener('click', function () {
+    if (timer) timer.stop();
+    typingInput.disabled = false;
+    soloNameSection.style.display = 'none';
+    soloHighscoreSection.style.display = 'none';
+    showScreen(startScreen);
   });
   restartBtn.addEventListener('click', function () {
     if (timer) timer.stop();
