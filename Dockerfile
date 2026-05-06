@@ -1,5 +1,5 @@
 FROM node:20-alpine
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl python3 make g++
 WORKDIR /app
 
 # Generate self-signed SSL certificate
@@ -12,4 +12,5 @@ COPY package.json package-lock.json* ./
 RUN npm ci --production
 COPY . .
 EXPOSE 3000 3443
+VOLUME /app/data
 CMD ["node", "server.js"]

@@ -5,9 +5,37 @@ const express = require('express');
 const { WebSocketServer } = require('ws');
 const path = require('path');
 const PASSAGES = require('./js/passages.js');
+const { initDB, insertScore, getLeaderboard } = require('./db');
+
+const db = initDB();
 
 const app = express();
+app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+
+// --- Highscore API ---
+
+// Submit a score and return the updated leaderboard
+app.post('/api/scores', (req, res) => {
+  const { playerName, wpm, accuracy, duration } = req.body;
+
+  const name = String(playerName || '').trim().slice(0, 16);
+  if (!name) return res.status(400).json({ error: 'Name is required' });
+  if (!Number.isInteger(wpm) || wpm < 0) return res.status(400).json({ error: 'Invalid WPM' });
+  if (!Number.isInteger(accuracy) || accuracy < 0 || accuracy > 100) return res.status(400).json({ error: 'Invalid accuracy' });
+  if (![30, 60, 120].includes(duration)) return res.status(400).json({ error: 'Invalid duration' });
+
+  insertScore(db, name, wpm, accuracy, duration);
+  const leaderboard = getLeaderboard(db, name);
+  res.json(leaderboard);
+});
+
+// Fetch leaderboard with optional player rank
+app.get('/api/scores', (req, res) => {
+  const name = String(req.query.playerName || '').trim();
+  const leaderboard = getLeaderboard(db, name || null);
+  res.json(leaderboard);
+});
 
 const HTTP_PORT = process.env.PORT || 3000;
 const HTTPS_PORT = process.env.HTTPS_PORT || 3443;

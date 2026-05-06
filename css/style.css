@@ -982,3 +982,64 @@ body::before {
     justify-content: center;
   }
 }
+
+/* --- Highscore leaderboard --- */
+
+.highscore-section {
+  margin: 2rem 0;
+}
+
+.highscore-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.highscore-table th,
+.highscore-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.highscore-table th {
+  color: var(--accent);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.highscore-table td {
+  font-size: 0.9rem;
+}
+
+.highscore-table tr.highlight {
+  background: rgba(167, 139, 250, 0.12);
+}
+
+.player-rank {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.highscore-name-section {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.highscore-name-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.highscore-name-row .mp-input {
+  max-width: 200px;
+}
