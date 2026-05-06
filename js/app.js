@@ -13,11 +13,17 @@
   const liveAccuracy = document.getElementById('live-accuracy');
   const soloDurationSelector = document.getElementById('solo-duration-selector');
 
+  const soloNameSection = document.getElementById('solo-name-section');
+  const soloNameInput = document.getElementById('solo-name-input');
+  const soloSubmitBtn = document.getElementById('solo-submit-score-btn');
+  const soloHighscoreSection = document.getElementById('solo-highscore-section');
+
   let engine = null;
   let timer = null;
   let timerStarted = false;
   let lastPassageIndex = -1;
   let selectedDuration = 60;
+  let lastSoloResult = null;
 
   // Duration selector click handler
   soloDurationSelector.addEventListener('click', function (e) {
@@ -179,6 +185,15 @@
       analysisEl.style.display = 'none';
     }
 
+    // Store result for leaderboard submission
+    lastSoloResult = { wpm: wpm, accuracy: accuracy, duration: selectedDuration };
+
+    // Show name input for leaderboard
+    soloNameSection.style.display = 'block';
+    soloHighscoreSection.style.display = 'none';
+    soloNameInput.value = '';
+    setTimeout(function () { soloNameInput.focus(); }, 100);
+
     showScreen(resultsScreen);
   }
 
@@ -213,9 +228,50 @@
     typingInput.focus();
   });
 
+  // Submit solo score to leaderboard
+  soloSubmitBtn.addEventListener('click', function () {
+    var name = soloNameInput.value.trim();
+    if (!name) return;
+    if (!lastSoloResult) return;
+
+    soloSubmitBtn.disabled = true;
+
+    fetch('/api/scores', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        playerName: name,
+        wpm: lastSoloResult.wpm,
+        accuracy: lastSoloResult.accuracy,
+        duration: lastSoloResult.duration,
+      }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        soloNameSection.style.display = 'none';
+        window.renderHighscoreTable('solo-highscore-body', 'solo-player-rank', data);
+        soloHighscoreSection.style.display = 'block';
+      })
+      .catch(function () {
+        soloNameSection.style.display = 'none';
+      })
+      .finally(function () {
+        soloSubmitBtn.disabled = false;
+      });
+  });
+
+  // Allow Enter key to submit name
+  soloNameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      soloSubmitBtn.click();
+    }
+  });
+
   startBtn.addEventListener('click', startGame);
   retryBtn.addEventListener('click', function () {
     typingInput.disabled = false;
+    soloNameSection.style.display = 'none';
+    soloHighscoreSection.style.display = 'none';
     startGame();
   });
   restartBtn.addEventListener('click', function () {
@@ -223,4 +279,40 @@
     typingInput.disabled = false;
     startGame();
   });
+
+  // --- Shared leaderboard rendering (used by solo and multiplayer) ---
+
+  // Format ISO date string for display
+  window.formatLeaderboardDate = function (dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr + 'Z');
+    return d.toLocaleDateString();
+  };
+
+  // Render highscore table from API response data
+  window.renderHighscoreTable = function (tbodyId, rankDivId, data) {
+    var tbody = document.getElementById(tbodyId);
+    tbody.innerHTML = '';
+
+    data.top10.forEach(function (entry) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + entry.rank + '</td>' +
+        '<td>' + escapeHTML(entry.player_name) + '</td>' +
+        '<td>' + entry.wpm + '</td>' +
+        '<td>' + entry.accuracy + '%</td>' +
+        '<td>' + entry.duration + 's</td>' +
+        '<td>' + window.formatLeaderboardDate(entry.created_at) + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    var rankDiv = document.getElementById(rankDivId);
+    if (data.playerRank) {
+      rankDiv.style.display = 'block';
+      rankDiv.textContent = 'Your best: #' + data.playerRank.rank +
+        ' (' + data.playerRank.wpm + ' WPM, ' + data.playerRank.accuracy + '% accuracy)';
+    } else {
+      rankDiv.style.display = 'none';
+    }
+  };
 })();

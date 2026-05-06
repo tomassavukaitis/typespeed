@@ -82,6 +82,25 @@
       </div>
       <h3 class="review-title">Passage Review</h3>
       <div id="passage-review" class="passage-review"></div>
+      <!-- Highscore name input (solo mode) -->
+      <div id="solo-name-section" class="highscore-name-section" style="display:none">
+        <label class="mp-label" for="solo-name-input">Enter your name for the leaderboard</label>
+        <div class="highscore-name-row">
+          <input id="solo-name-input" class="mp-input" type="text" maxlength="16" placeholder="Your name" autocomplete="off">
+          <button id="solo-submit-score-btn" class="btn btn-primary btn-small">Submit</button>
+        </div>
+      </div>
+      <!-- Highscore table -->
+      <div id="solo-highscore-section" class="highscore-section" style="display:none">
+        <h3 class="review-title">Leaderboard</h3>
+        <table class="highscore-table">
+          <thead>
+            <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
+          </thead>
+          <tbody id="solo-highscore-body"></tbody>
+        </table>
+        <div id="solo-player-rank" class="player-rank" style="display:none"></div>
+      </div>
       <button id="retry-btn" class="btn btn-primary">Try Again</button>
     </div>
   </div>
@@ -192,6 +211,17 @@
       </table>
       <h3 class="review-title">Passage Review</h3>
       <div id="mp-passage-review" class="passage-review"></div>
+      <!-- Highscore table (multiplayer) -->
+      <div id="mp-highscore-section" class="highscore-section" style="display:none">
+        <h3 class="review-title">Leaderboard</h3>
+        <table class="highscore-table">
+          <thead>
+            <tr><th>#</th><th>Name</th><th>WPM</th><th>Acc</th><th>Time</th><th>Date</th></tr>
+          </thead>
+          <tbody id="mp-highscore-body"></tbody>
+        </table>
+        <div id="mp-player-rank" class="player-rank" style="display:none"></div>
+      </div>
       <div class="mp-results-actions">
         <button id="mp-play-again-btn" class="btn btn-primary">Play Again</button>
         <button id="mp-results-leave-btn" class="btn btn-small">Leave</button>

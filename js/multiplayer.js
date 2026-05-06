@@ -421,6 +421,29 @@
       mpResultReview.innerHTML = engine.getReviewHTML();
     }
 
+    // Submit score to leaderboard and display it
+    var mpHighscoreSection = document.getElementById('mp-highscore-section');
+    mpHighscoreSection.style.display = 'none';
+
+    if (me && playerName) {
+      fetch('/api/scores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerName: playerName,
+          wpm: me.wpm,
+          accuracy: me.accuracy,
+          duration: raceDuration,
+        }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          window.renderHighscoreTable('mp-highscore-body', 'mp-player-rank', data);
+          mpHighscoreSection.style.display = 'block';
+        })
+        .catch(function () {});
+    }
+
     window.showScreen(mpResultsScreen);
   }
 

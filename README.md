@@ -12,6 +12,7 @@ A typing speed test with configurable duration. Pick a passage, type as fast and
 - Detailed results breakdown with passage review highlighting correct and incorrect characters
 - **Mistake analysis** — post-game breakdown showing which keys you mistyped and how often
 - **Multiplayer** — Create or join a room (6-char code), race against friends in real time with live progress bars and standings
+- **Global leaderboard** — SQLite-backed highscore table showing top 10 scores (by WPM) after every game, with your rank displayed if you're outside the top 10
 
 ## Prerequisites
 
@@ -45,7 +46,7 @@ Then open `http://localhost:3000`.
 
 ```bash
 docker build -t typespeed .
-docker run -d -p 3000:3000 typespeed
+docker run -d -p 3000:3000 -v typespeed-data:/app/data typespeed
 ```
 
 Then open `http://localhost:3000`.
@@ -112,10 +113,12 @@ js/
   timer.js          — Configurable countdown timer
   scoring.js        — WPM and accuracy calculations
   typing.js         — Input handling, passage rendering, typo blocking, mistake tracking
-  app.js            — Solo mode controller, screen transitions, mistake analysis
+  app.js            — Solo mode controller, screen transitions, leaderboard rendering
   multiplayer.js    — Multiplayer client (WebSocket, lobby, race, results)
-server.js           — Node.js server (Express static files + WebSocket)
-package.json        — Node.js dependencies (express, ws)
+db.js               — SQLite database module (highscore persistence)
+server.js           — Node.js server (Express + WebSocket + REST API)
+package.json        — Node.js dependencies (express, ws, better-sqlite3)
+data/               — SQLite database file (gitignored, created at runtime)
 Dockerfile          — Node.js container image
 terraform/          — AWS infrastructure (Terraform)
 ansible/            — Deployment playbook (Ansible)
